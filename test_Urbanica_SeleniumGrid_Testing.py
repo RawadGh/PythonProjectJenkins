@@ -14,37 +14,44 @@ from selenium.webdriver.support.wait import WebDriverWait
 def driver():
     firefox_driver_binary = "./drivers/geckodriver"
     ser_firefox = FirefoxService(firefox_driver_binary)
+    firefox_options = FireFoxOptions()
 
-    brave_path = "./drivers/chromedriver"
+
+    chrome_path = "./drivers/chromedriver"
     options = webdriver.ChromeOptions()
-    options.binary_location = brave_path
+    options.binary_location = chrome_path
 
-    browser_name = "edge"
+    browser_name = "firefox"
 
     # if isinstance(browserName,list):
     #     for browser_name in browserName:
     if browser_name == "firefox-webdriver":
         driver = webdriver.Firefox(service=ser_firefox)
     elif browser_name == "firefox":
+        firefox_options.add_argument("--headless")
         dc = {
             "browserName": "firefox",
             "platformName": "Windows 11"
         }
-        driver = webdriver.Remote("http://localhost:4444", desired_capabilities=dc)
+        driver = webdriver.Remote("http://localhost:4444", desired_capabilities=dc, options=firefox_options)
 
     elif browser_name == "chrome":
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+
         dc = {
             "browserName": "chrome",
             "platformName": "Windows 11"
         }
-        driver = webdriver.Remote("http://localhost:4444", desired_capabilities=dc)
+        driver = webdriver.Remote("http://localhost:4444", desired_capabilities=dc, options=options)
 
     elif browser_name == "edge":
+        options.add_argument("--headless")
         dc = {
             "browserName": "MicrosoftEdge",
             "platformName": "Windows 11"
         }
-        driver = webdriver.Remote("http://localhost:4444", desired_capabilities=dc)
+        driver = webdriver.Remote("http://localhost:4444", desired_capabilities=dc , options=options)
 
     elif browser_name == "firefox-mobile":
         firefox_options = FireFoxOptions()
@@ -118,6 +125,7 @@ def driver():
 def test_google_page_title(driver):
     driver.get('https://www.google.com')
     title = driver.title
+    driver.save_screenshot("test_google_page_title.png")
     assert title == str.title("google")
 
 
