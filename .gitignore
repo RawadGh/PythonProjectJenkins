@@ -1,0 +1,6 @@
+.idea/
+jenkins.war
+venv/
+chromedriver.exe
+geckodriver.exe
+msedgedriver.exe
