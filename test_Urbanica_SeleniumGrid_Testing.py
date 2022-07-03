@@ -1,5 +1,5 @@
 import time
-
+from faker import Faker
 import pytest
 from selenium import webdriver
 from selenium.webdriver import Keys
@@ -122,6 +122,29 @@ def driver():
 # driver = webdriver.Chrome(chrome_options = chrome_options)
 
 
+def test_testPositiveRegistration(driver):
+    driver.get("https://www.urbanica-wh.com/")
+    driver.maximize_window()
+    driver.find_element(By.ID, "customer-login-link").click()
+    time.sleep(10)
+    driver.find_element(By.CSS_SELECTOR, "#customer-popup-registration > span").click()
+    driver.find_element(By.ID, "firstname").send_keys("rawad")
+    driver.find_element(By.ID, "lastname").send_keys("ghname")
+    fake = Faker()
+    proper_email = fake.ascii_email()
+    driver.find_element(By.ID, "register_email_address").send_keys(proper_email)
+    driver.find_element(By.ID, "register_password").send_keys("Vd89651**")
+    driver.find_element(By.CSS_SELECTOR, ".label:nth-child(2) > span").click()
+    driver.find_element(By.CSS_SELECTOR, ".actions-toolbar-submit:nth-child(1) span").click()
+    time.sleep(15)
+    driver.find_element(By.CSS_SELECTOR, "#customer-account-link").click()
+    time.sleep(5)
+    assert driver.find_element(By.CSS_SELECTOR,
+                                        "#ui-id-5 > div.block-title.customer-name > span").text == 'היי, rawad'
+
+
+
+
 def test_google_page_title(driver):
     driver.get('https://www.google.com')
     title = driver.title
@@ -129,92 +152,92 @@ def test_google_page_title(driver):
     assert title == str.title("google")
 
 
-def test_youtube_page_title(driver):
-    driver.get('https://www.youtube.com')
-    title = driver.title
-    assert title == "Home - YouTube"
-
-
-def test_addition_of_2_and_5_simple(driver):
-    driver.get('https://www.google.com')
-    # css_selector, xpath
-    search_field = driver.find_element(By.NAME, "q")
-    search_field.click()
-    search_field.send_keys("2 + 5")
-    search_field.send_keys(Keys.ENTER)
-
-    ans_selector = "#cwos"
-
-    # WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR,ans_selector)))
-    # actual_field = driver.find_element(By.CSS_SELECTOR,ans_selector)
-
-    actual_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, ans_selector)))
-
-    assert actual_field.text == str(7)
-
-    time.sleep(3)
-
-
-calc_numbers_input = [("2 + 5", 7), ("3 + 6", 9), ("12 + -1", 11), ("6*9", 40)]
-message_for_calc_numbers_input = [f"Testing {expected} = {ans}" for expected, ans in calc_numbers_input]
-
-
-@pytest.mark.parametrize(
-    "test_input,expected_output",
-    [("2 + 5", 7), ("3 + 6", 9), ("12 + -1", 11), ("6*9", 40)],
-    ids=message_for_calc_numbers_input
-)
-def test_addition_of_2_and_5(driver, test_input, expected_output):
-    driver.get('https://www.google.com')
-    # css_selector, xpath
-    search_field = driver.find_element(By.NAME, "q")
-    search_field.click()
-    search_field.send_keys(test_input)
-    search_field.send_keys(Keys.ENTER)
-
-    ans_selector = "#cwos"
-
-    # WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR,ans_selector)))
-    # actual_field = driver.find_element(By.CSS_SELECTOR,ans_selector)
-
-    actual_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, ans_selector)))
-
-    assert actual_field.text == str(expected_output)
-
-    time.sleep(3)
-
-
-def test_youtube_search_and_play_video(driver):
-    driver.get("https://www.youtube.com/")
-    search_field = driver.find_element(By.NAME, "search_query")
-    search_option_selector = "ytd-video-renderer.ytd-item-section-renderer:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > h3:nth-child(1) > a:nth-child(2) > yt-formatted-string:nth-child(2)"
-    search_field.click()
-    time.sleep(1)
-    search_field.send_keys("testing qa automation")
-    search_field.send_keys(Keys.ENTER)
-
-    first_elem = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, search_option_selector)))
-
-    if first_elem:
-        driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
-
-    first_elem.click()
-
-    first_elem_video_selector = ".video-stream"
-    first_elem_video = WebDriverWait(driver, 10) \
-        .until(EC.presence_of_element_located((By.CSS_SELECTOR, first_elem_video_selector)))
-    time.sleep(4)
-
-    first_elem_video.click()
-
-    first_elem_video_title_selector = "yt-formatted-string.ytd-video-primary-info-renderer:nth-child(1)"
-    first_elem_video_title = WebDriverWait(driver, 10) \
-        .until(EC.presence_of_element_located((By.CSS_SELECTOR, first_elem_video_title_selector)))
-
-    assert first_elem_video_title.text == "What is Automated Testing?"
-
-    time.sleep(5)
+# def test_youtube_page_title(driver):
+#     driver.get('https://www.youtube.com')
+#     title = driver.title
+#     assert title == "Home - YouTube"
+#
+#
+# def test_addition_of_2_and_5_simple(driver):
+#     driver.get('https://www.google.com')
+#     # css_selector, xpath
+#     search_field = driver.find_element(By.NAME, "q")
+#     search_field.click()
+#     search_field.send_keys("2 + 5")
+#     search_field.send_keys(Keys.ENTER)
+#
+#     ans_selector = "#cwos"
+#
+#     # WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR,ans_selector)))
+#     # actual_field = driver.find_element(By.CSS_SELECTOR,ans_selector)
+#
+#     actual_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, ans_selector)))
+#
+#     assert actual_field.text == str(7)
+#
+#     time.sleep(3)
+#
+#
+# calc_numbers_input = [("2 + 5", 7), ("3 + 6", 9), ("12 + -1", 11), ("6*9", 40)]
+# message_for_calc_numbers_input = [f"Testing {expected} = {ans}" for expected, ans in calc_numbers_input]
+#
+#
+# @pytest.mark.parametrize(
+#     "test_input,expected_output",
+#     [("2 + 5", 7), ("3 + 6", 9), ("12 + -1", 11), ("6*9", 40)],
+#     ids=message_for_calc_numbers_input
+# )
+# def test_addition_of_2_and_5(driver, test_input, expected_output):
+#     driver.get('https://www.google.com')
+#     # css_selector, xpath
+#     search_field = driver.find_element(By.NAME, "q")
+#     search_field.click()
+#     search_field.send_keys(test_input)
+#     search_field.send_keys(Keys.ENTER)
+#
+#     ans_selector = "#cwos"
+#
+#     # WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR,ans_selector)))
+#     # actual_field = driver.find_element(By.CSS_SELECTOR,ans_selector)
+#
+#     actual_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, ans_selector)))
+#
+#     assert actual_field.text == str(expected_output)
+#
+#     time.sleep(3)
+#
+#
+# def test_youtube_search_and_play_video(driver):
+#     driver.get("https://www.youtube.com/")
+#     search_field = driver.find_element(By.NAME, "search_query")
+#     search_option_selector = "ytd-video-renderer.ytd-item-section-renderer:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > h3:nth-child(1) > a:nth-child(2) > yt-formatted-string:nth-child(2)"
+#     search_field.click()
+#     time.sleep(1)
+#     search_field.send_keys("testing qa automation")
+#     search_field.send_keys(Keys.ENTER)
+#
+#     first_elem = WebDriverWait(driver, 10).until(
+#         EC.presence_of_element_located((By.CSS_SELECTOR, search_option_selector)))
+#
+#     if first_elem:
+#         driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
+#
+#     first_elem.click()
+#
+#     first_elem_video_selector = ".video-stream"
+#     first_elem_video = WebDriverWait(driver, 10) \
+#         .until(EC.presence_of_element_located((By.CSS_SELECTOR, first_elem_video_selector)))
+#     time.sleep(4)
+#
+#     first_elem_video.click()
+#
+#     first_elem_video_title_selector = "yt-formatted-string.ytd-video-primary-info-renderer:nth-child(1)"
+#     first_elem_video_title = WebDriverWait(driver, 10) \
+#         .until(EC.presence_of_element_located((By.CSS_SELECTOR, first_elem_video_title_selector)))
+#
+#     assert first_elem_video_title.text == "What is Automated Testing?"
+#
+#     time.sleep(5)
 
 #
 # def test_run_parallel(browserName):
