@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 
-@pytest.fixture() #11
+@pytest.fixture()
 def driver():
     firefox_driver_binary = "./drivers/geckodriver"
     ser_firefox = FirefoxService(firefox_driver_binary)
@@ -121,29 +121,29 @@ def driver():
 # chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
 # driver = webdriver.Chrome(chrome_options = chrome_options)
 
-
-def test_testPositiveRegistration(driver):
-    driver.get("https://www.urbanica-wh.com/")
-    driver.maximize_window()
-    driver.find_element(By.ID, "customer-login-link").click()
-    time.sleep(10)
-    driver.find_element(By.CSS_SELECTOR, "#customer-popup-registration > span").click()
-    driver.find_element(By.ID, "firstname").send_keys("rawad")
-    driver.find_element(By.ID, "lastname").send_keys("ghname")
-    fake = Faker()
-    proper_email = fake.ascii_email()
-    driver.find_element(By.ID, "register_email_address").send_keys(proper_email)
-    driver.find_element(By.ID, "register_password").send_keys("Vd89651**")
-    driver.find_element(By.CSS_SELECTOR, ".label:nth-child(2) > span").click()
-    driver.find_element(By.CSS_SELECTOR, ".actions-toolbar-submit:nth-child(1) span").click()
-    time.sleep(15)
-    driver.find_element(By.CSS_SELECTOR, "#customer-account-link").click()
-    time.sleep(5)
-    assert driver.find_element(By.CSS_SELECTOR,
-                                        "#ui-id-5 > div.block-title.customer-name > span").text == 'היי, rawad'
-
-
-
+#
+# def test_testPositiveRegistration(driver):
+#     driver.get("https://www.urbanica-wh.com/")
+#     driver.maximize_window()
+#     driver.find_element(By.ID, "customer-login-link").click()
+#     time.sleep(10)
+#     driver.find_element(By.CSS_SELECTOR, "#customer-popup-registration > span").click()
+#     driver.find_element(By.ID, "firstname").send_keys("rawad")
+#     driver.find_element(By.ID, "lastname").send_keys("ghname")
+#     fake = Faker()
+#     proper_email = fake.ascii_email()
+#     driver.find_element(By.ID, "register_email_address").send_keys(proper_email)
+#     driver.find_element(By.ID, "register_password").send_keys("Vd89651**")
+#     driver.find_element(By.CSS_SELECTOR, ".label:nth-child(2) > span").click()
+#     driver.find_element(By.CSS_SELECTOR, ".actions-toolbar-submit:nth-child(1) span").click()
+#     time.sleep(15)
+#     driver.find_element(By.CSS_SELECTOR, "#customer-account-link").click()
+#     time.sleep(5)
+#     assert driver.find_element(By.CSS_SELECTOR,
+#                                         "#ui-id-5 > div.block-title.customer-name > span").text == 'היי, rawad'
+#
+#
+#
 
 def test_google_page_title(driver):
     driver.get('https://www.google.com')
