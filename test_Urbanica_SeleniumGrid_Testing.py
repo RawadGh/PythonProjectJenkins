@@ -1,5 +1,5 @@
 import time
-from faker import Faker
+# from faker import Faker
 import pytest
 from selenium import webdriver
 from selenium.webdriver import Keys
